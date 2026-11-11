@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style30.css">
+    <!-- فراخوانی کتابخانه‌های React برای اجرا در مرورگر موبایل -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- کل اپلیکیشن React داخل همین یک باکس ساخته می‌شود -->
+    <div id="root"></div>
+
+    
+  <script type="text/babel">
+      // ۱. کامپوننت هدر
+      function Header(props) {
+        return (
+          <header className="site-header">
+            <span>{props.storeName}</span>
+            <span>{props.offer}</span>
+            <button>سبد خرید: {props.cartCount}</button>
+          </header>
+        );
+      }
+
+      // ۲. کامپوننت کارت کتاب
+      function BookCard(props) {
+        return (
+          <div className="book-card">
+            <h1>{props.title}</h1>
+            <p>{props.desc}</p>
+            <div className="card-footer">
+              <span className="price">{props.price}</span>
+              <button onClick={props.onBuy}>افزودن به سبد خرید</button>
+            </div>
+          </div>
+        );
+      }
+
+      // ۳. کامپوننت اصلی متصل به سرور پایتون!
+      function App() {
+        // حافظه هوشمند برای نگه داشتن کتاب‌هایی که از سرور پایتون می‌آیند (در ابتدا خالی: [])
+        const [books, setBooks] = React.useState([]);
+        const [count, setCount] = React.useState(0);
+        const [search, setSearch] = React.useState("");
+
+        // فقط یک بار در لحظه باز شدن صفحه، کتاب‌ها را از سرور پایتون (پورت 8000) بگیر
+        React.useEffect(function() {
+          fetch("http://localhost:8000")
+            .then(function(res) {
+              return res.json();
+            })
+            .then(function(data) {
+              setBooks(data); // ریختن کتاب‌های پایتون داخل حافظه React!
+            });
+        }, []);
+
+        function handleBuy() {
+          setCount(count + 1);
+        }
+
+        // فیلتر کردن کتاب‌های سرور پایتون بر اساس کلمه تایپ‌شده در باکس جستجو
+        const filteredBooks = books.filter(function(book) {
+          return book.title.includes(search);
+        });
+
+        return (
+          <div>
+            <Header
+              storeName="فروشگاه React + Python"
+              offer="متصل به سرور پایتون"
+              cartCount={count}
+            />
+
+            <input
+              className="search-box"
+              type="text"
+              placeholder="جستجو در کتاب‌های سرور پایتون..."
+              onChange={function(e) {
+                setSearch(e.target.value);
+              }}
+            />
+
+            <p>تعداد کتاب‌های پیدا شده: {filteredBooks.length}</p>
+
+            {filteredBooks.map(function(book) {
+              return (
+                <BookCard
+                  key={book.title}
+                  title={book.title}
+                  desc={book.description}
+                  price={book.price + " تومان"}
+                  onBuy={handleBuy}
+                />
+              );
+            })}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>

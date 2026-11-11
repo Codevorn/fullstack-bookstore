@@ -1,0 +1,63 @@
+.book-card {
+  width: 90%;
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #A0E0EF;
+  font-family: sans-serif;
+  margin-top: 15px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* چیدن قیمت و دکمه در دو طرف کارت با Flexbox */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+button {
+  background-color: #198754;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* تغییر رنگ دکمه هنگام رفتن ماوس یا لمس */
+button:hover {
+  background-color: #14532d;
+}
+.site-header{
+  background-color: #1B365D;
+  padding: 15px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+}
+
+.search-box {
+  width: 300px;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: 2px solid #1B365D;
+  font-size: 15px;
+}
